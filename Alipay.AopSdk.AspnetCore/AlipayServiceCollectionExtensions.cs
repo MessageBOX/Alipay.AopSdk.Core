@@ -1,8 +1,6 @@
 ﻿using System;
-using Alipay.AopSdk.Core;
-using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Alipay.AopSdk.AspnetCore
 {
@@ -20,9 +18,22 @@ namespace Alipay.AopSdk.AspnetCore
 				throw new ArgumentNullException(nameof(options));
 			services.AddOptions();
 			services.Configure(options);
-			services.Add(ServiceDescriptor.Transient<IAlipayService, AlipayService>());
-//			services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-			return services;
+            services.AddSingleton<AlipayService>();
+		    services.AddSingleton<AlipayF2FService>();
+            return services;
 		}
-	}
+
+	    public static IServiceCollection AddAlipay(this IServiceCollection services, IConfiguration section)
+	    {
+	        if (services == null)
+	            throw new ArgumentNullException(nameof(services));
+	        if (section == null)
+	            throw new ArgumentNullException(nameof(section));
+            services.AddOptions();
+            services.Configure<AlipayOptions>(section);
+	        services.AddSingleton<AlipayService>();
+	        services.AddSingleton<AlipayF2FService>();
+	        return services;
+	    }
+    }
 }

@@ -94,7 +94,7 @@ namespace Alipay.AopSdk.Core.Util
 			}
 			catch (Exception ex)
 			{
-				throw new AopException("您使用的私钥格式错误，请检查RSA私钥配置" + ",charset = " + charset, ex);
+				throw new AopException($"您使用的私钥格式错误，请检查RSA私钥配置,charset = {charset},异常信息:{ex.Message}", ex);
 			}
 			return Convert.ToBase64String(signatureBytes);
 		}
@@ -663,7 +663,7 @@ namespace Alipay.AopSdk.Core.Util
 			}
 		}
 
-		private static RSA LoadCertificateString(string strKey, string signType)
+		public static RSA LoadCertificateString(string strKey, string signType)
 		{
 			byte[] data = null;
 			//读取带
